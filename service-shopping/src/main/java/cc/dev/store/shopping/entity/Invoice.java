@@ -1,5 +1,6 @@
 package cc.dev.store.shopping.entity;
 
+import cc.dev.store.shopping.model.Customer;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import org.hibernate.annotations.Proxy;
@@ -35,9 +36,9 @@ public class Invoice {
     private Date createAt;
 
     @Valid
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "invoice_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private List<InvoiceItem> items;
 
     private String state;
@@ -50,5 +51,8 @@ public class Invoice {
     public void prePersist() {
         this.createAt = new Date();
     }
+
+    @Transient
+    private Customer customer;
 
 }
